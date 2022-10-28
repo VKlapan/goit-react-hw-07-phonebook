@@ -6,10 +6,10 @@ import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 
 import * as contactsOperations from '../redux/contacts/contactsOperations';
+import * as contactsSelectors from '../redux/contacts/contactsSelectors';
 
 const App = () => {
   const styleDefault = {
-    height: '100vh',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -24,10 +24,10 @@ const App = () => {
     dispatch(contactsOperations.getContacts());
   }, [dispatch]);
 
-  const contacts = useSelector(state => state.contacts.items);
-  const filter = useSelector(state => state.filter);
-
-  console.log('CONTACTS', contacts);
+  const contacts = useSelector(contactsSelectors.getContacts);
+  const filter = useSelector(contactsSelectors.getFilter);
+  const isLoading = useSelector(contactsSelectors.getIsLoading);
+  const error = useSelector(contactsSelectors.getError);
 
   const normalizedFilter = filter.toLowerCase();
   const visibleContacts = contacts.filter(contact =>
@@ -40,7 +40,11 @@ const App = () => {
       <ContactForm />
       <h2>Contacts</h2>
       <Filter />
-      <ContactList contacts={visibleContacts} />
+      {isLoading && !error && <b>Request in progress...</b>}
+      {error && <p>Oops, something went wrong. Error is: "{error}"</p>}
+      {!isLoading && contacts.length > 0 && (
+        <ContactList contacts={visibleContacts} />
+      )}
     </div>
   );
 };
