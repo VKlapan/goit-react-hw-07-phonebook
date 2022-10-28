@@ -1,8 +1,11 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
+
+import * as contactsOperations from '../redux/contacts/contactsOperations';
 
 const App = () => {
   const styleDefault = {
@@ -15,8 +18,16 @@ const App = () => {
     color: '#010101',
   };
 
-  const contacts = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(contactsOperations.getContacts());
+  }, [dispatch]);
+
+  const contacts = useSelector(state => state.contacts.items);
   const filter = useSelector(state => state.filter);
+
+  console.log('CONTACTS', contacts);
 
   const normalizedFilter = filter.toLowerCase();
   const visibleContacts = contacts.filter(contact =>
