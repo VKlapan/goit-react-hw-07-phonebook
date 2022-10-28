@@ -49,7 +49,12 @@ const contactsSlice = createSlice({
       const deletedContacts = state.items.filter(
         item => item.id !== action.payload
       );
-      return { isLoading: false, error: null, items: deletedContacts };
+
+      return {
+        isLoading: false,
+        error: null,
+        items: deletedContacts,
+      };
     },
 
     [contactsOperations.deleteContact.rejected](state, action) {

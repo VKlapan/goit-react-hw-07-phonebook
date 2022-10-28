@@ -33,9 +33,6 @@ const ContactForm = () => {
       alert(`${name} is already in contacts`);
       return;
     }
-
-    console.log('ADD');
-
     dispatch(addContact({ name, number }));
     setName('');
     setNumber('');
